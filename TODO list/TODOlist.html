@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>DBP</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    p {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      margin: 0;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+
+    li.completed {
+      text-decoration: line-through;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+      background-color: #fff;
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    .checkbox-label {
+      margin-left: 10px;
+      flex: 1;
+    }
+
+    .task-number {
+      margin-right: 10px;
+    }
+
+    .delete-button {
+      display: none;
+      margin-left: 10px;
+      cursor: pointer;
+      color: #ff0000;
+    }
+
+    #new-task {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    #task {
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #complete-all {
+      display: block;
+      margin: 10px auto;
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #complete-all:hover {
+      background-color: #555;
+    }
+
+    ol {
+      list-style: none;
+      padding: 0;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const taskList = document.querySelector('#tasks');
+      const completeAllButton = document.querySelector('#complete-all');
+      let taskCounter = 1;
+
+
+      document.querySelector('#new-task').onsubmit = (event) => {
+        event.preventDefault();
+
+
+        const li = document.createElement('li');
+
+
+        const taskText = document.querySelector('#task').value;
+        li.innerHTML = `<span class="task-number">${taskCounter}.</span><input type="checkbox" class="checkbox"><span class="checkbox-label">${taskText}</span><span class="delete-button">X</span>`;
+        li.className = 'incomplete';
+
+
+        const deleteButton = li.querySelector('.delete-button');
+        deleteButton.addEventListener('click', () => {
+          taskList.removeChild(li);
+        });
+
+
+
+        taskList.append(li);
+
+
+        document.querySelector('#task').value = '';
+        taskCounter++;
+      };
+
+
+      taskList.addEventListener('change', (event) => {
+        if (event.target.classList.contains('checkbox')) {
+          const li = event.target.parentNode;
+          if (event.target.checked) {
+            li.classList.add('completed');
+            const deleteButton = li.querySelector('.delete-button');
+            deleteButton.style.display = 'inline'; 
+          } else {
+            li.classList.remove('completed');
+            const deleteButton = li.querySelector('.delete-button');
+            deleteButton.style.display = 'none'; 
+          }
+        }
+      });
+      
+
+      completeAllButton.addEventListener('click', () => {
+        const checkboxes = document.querySelectorAll('.checkbox');
+        checkboxes.forEach((checkbox) => {
+          checkbox.checked = true;
+          const li = checkbox.parentNode;
+          li.classList.add('completed');
+          const deleteButton = li.querySelector('.delete-button');
+          deleteButton.style.display = 'inline';
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <p>Computer Science</p>
+  <h1>Tasks</h1>
+  <form id="new-task">
+    <input id="task" autocomplete="off" autofocus placeholder="New Task" type="text">
+    <input type="submit">
+  </form>
+  <button id="complete-all">Complete All</button>
+  <ol id="tasks">
+  </ol>
+</body>
+</html>
